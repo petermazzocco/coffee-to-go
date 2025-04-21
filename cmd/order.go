@@ -8,6 +8,7 @@ import (
 	"coffee/handlers/goroutines"
 	"coffee/handlers/make"
 	"coffee/handlers/pointers"
+	selectPkg "coffee/handlers/select"
 	switchpkg "coffee/handlers/switch"
 	"fmt"
 	"strconv"
@@ -22,6 +23,8 @@ var (
 	ctxBool         bool
 	pickUpCtxBool   bool
 	updateOrderBool bool
+	selectBool      bool
+	selectPayBool   bool
 )
 
 // orderCmd represents the order command
@@ -57,6 +60,15 @@ var orderCmd = &cobra.Command{
 			context.CoffeeShopPickUpOrder(orderCode)
 		case updateOrderBool:
 			pointers.UpdateOrder()
+		case selectBool:
+			selectPkg.DeliveryApps()
+		case selectPayBool:
+			amt, err := strconv.Atoi(args[0])
+			if err != nil {
+				fmt.Println("Invalid format for order code:", err)
+				return
+			}
+			selectPkg.ReceivePayment(amt)
 		default:
 			return
 		}
@@ -71,5 +83,6 @@ func init() {
 	orderCmd.Flags().BoolVarP(&ctxBool, "delivery", "d", false, "Learning about context? A customer just placed a delivery order, can we make it in time?.")
 	orderCmd.Flags().BoolVarP(&pickUpCtxBool, "pickup", "p", false, "Learning about context? A customer just placed a pickup order, do they have the right pick up code?.")
 	orderCmd.Flags().BoolVarP(&updateOrderBool, "update", "u", false, "Learning about pointers? Let's update our preivous order.")
-
+	orderCmd.Flags().BoolVarP(&selectBool, "select", "s", false, "Learning about select? We have two delivery apps waiting for orders, which comes first?.")
+	orderCmd.Flags().BoolVarP(&selectPayBool, "select-pay", "y", false, "Learning about select? We have two payment apps waiting for orders, which comes first?.")
 }
