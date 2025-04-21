@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"coffee/handlers/interfaces"
+	jsonPkg "coffee/handlers/json"
 	"coffee/handlers/make"
 	"coffee/handlers/maps"
 	"fmt"
@@ -19,6 +20,7 @@ var (
 	newMenuItemBool    bool
 	deleteMenuItemBool bool
 	interfacesBool     bool
+	jsonBool           bool
 )
 
 // managerCmd represents the manager command
@@ -44,6 +46,8 @@ and learn Golang.`,
 			maps.AddNewMenuItem(args[0], price)
 		case deleteMenuItemBool:
 			maps.RemoveMenuItem(args[0])
+		case jsonBool:
+			jsonPkg.UnmarshalJson()
 		case interfacesBool:
 			interfaces.CoffeeShopChangeImport()
 		}
@@ -57,4 +61,5 @@ func init() {
 	managerCmd.Flags().BoolVarP(&deleteMenuItemBool, "delete-item", "r", false, "Learning about maps? Let's remove an item from the menu.")
 	managerCmd.Flags().BoolVarP(&interfacesBool, "import", "i", false, "Learning about interfaces? Let's change our coffee shop's import.")
 	managerCmd.Flags().BoolVarP(&mapsBool, "menu", "m", false, "Learning about maps? Let's check our available items on the menu.")
+	managerCmd.Flags().BoolVarP(&jsonBool, "json", "j", false, "Learning about JSON? Let's see if we can get a list from our new distributor for their coffee selection.")
 }
