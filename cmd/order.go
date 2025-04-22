@@ -4,9 +4,11 @@ Copyright © 2025 Peter Mazzocco <petermazzocco@gmail.com>
 package cmd
 
 import (
+	bufferHandler "coffee/handlers/buffer"
 	"coffee/handlers/context"
 	"coffee/handlers/goroutines"
 	"coffee/handlers/make"
+	mutexHandler "coffee/handlers/mutex"
 	"coffee/handlers/pointers"
 	selectPkg "coffee/handlers/select"
 	switchpkg "coffee/handlers/switch"
@@ -25,6 +27,8 @@ var (
 	updateOrderBool bool
 	selectBool      bool
 	selectPayBool   bool
+	bufferBool      bool
+	mtxBool         bool
 )
 
 // orderCmd represents the order command
@@ -69,6 +73,10 @@ var orderCmd = &cobra.Command{
 				return
 			}
 			selectPkg.ReceivePayment(amt)
+		case bufferBool:
+			bufferHandler.SecretItem(args[0])
+		case mtxBool:
+			mutexHandler.MachineInUse()
 		default:
 			return
 		}
@@ -85,4 +93,6 @@ func init() {
 	orderCmd.Flags().BoolVarP(&updateOrderBool, "update", "u", false, "Learning about pointers? Let's update our preivous order.")
 	orderCmd.Flags().BoolVarP(&selectBool, "select", "s", false, "Learning about select? We have two delivery apps waiting for orders, which comes first?.")
 	orderCmd.Flags().BoolVarP(&selectPayBool, "select-pay", "y", false, "Learning about select? We have two payment apps waiting for orders, which comes first?.")
+	orderCmd.Flags().BoolVarP(&bufferBool, "buffer", "b", false, "Learning about buffers? Let's buffer our orders.")
+	orderCmd.Flags().BoolVarP(&mtxBool, "mutex", "m", false, "Learning about mutexes? Let's use a mutex to protect our inventory.")
 }
