@@ -3,6 +3,7 @@ package context
 import (
 	"context"
 	"fmt"
+	"log"
 	"strconv"
 	"time"
 )
@@ -26,7 +27,7 @@ func CoffeeShopDelivery(seconds string) {
 	delivered := make(chan bool) // Handle the delivery status
 
 	go func() {
-		fmt.Println("Coffee is being delivered...")
+		log.Println("Coffee is being delivered...")
 		duration := time.Duration(sec) * time.Second
 		time.Sleep(duration) // The delivery time you entered
 		close(delivered)     // Close the channel to indicate delivery completion
@@ -34,8 +35,8 @@ func CoffeeShopDelivery(seconds string) {
 
 	select {
 	case <-delivered: // The customer will "receive" a delivered order
-		fmt.Println("Coffee delivered on time! The customer is happy.")
+		log.Println("Coffee delivered on time! The customer is happy.")
 	case <-ctx.Done(): // Handle the case in which it's been delivered late (timed out)
-		fmt.Println("Our coffee was delivered late! We will refund the custoemr for their cold coffee:", ctx.Err())
+		log.Println("Our coffee was delivered late! We will refund the custoemr for their cold coffee:", ctx.Err())
 	}
 }

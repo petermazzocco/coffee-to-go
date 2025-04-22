@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"coffee/handlers/interfaces"
+	ioPkg "coffee/handlers/io"
 	jsonPkg "coffee/handlers/json"
 	"coffee/handlers/make"
 	"coffee/handlers/maps"
@@ -21,6 +22,8 @@ var (
 	deleteMenuItemBool bool
 	interfacesBool     bool
 	jsonBool           bool
+	receiptBool        bool
+	readRecptBool      bool
 )
 
 // managerCmd represents the manager command
@@ -50,7 +53,12 @@ and learn Golang.`,
 			jsonPkg.UnmarshalJson()
 		case interfacesBool:
 			interfaces.CoffeeShopChangeImport()
+		case receiptBool:
+			ioPkg.CreateReceipt()
+		case readRecptBool:
+			ioPkg.ReadReceipt()
 		}
+
 	},
 }
 
@@ -62,4 +70,6 @@ func init() {
 	managerCmd.Flags().BoolVarP(&interfacesBool, "import", "i", false, "Learning about interfaces? Let's change our coffee shop's import.")
 	managerCmd.Flags().BoolVarP(&mapsBool, "menu", "m", false, "Learning about maps? Let's check our available items on the menu.")
 	managerCmd.Flags().BoolVarP(&jsonBool, "json", "j", false, "Learning about JSON? Let's see if we can get a list from our new distributor for their coffee selection.")
+	managerCmd.Flags().BoolVarP(&receiptBool, "new-receipt", "c", false, "Learning about receipts? Let's create a receipt.")
+	managerCmd.Flags().BoolVarP(&readRecptBool, "read-receipt", "o", false, "Learning about receipts? Let's read a receipt.")
 }
