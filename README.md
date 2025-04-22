@@ -1,4 +1,4 @@
-# coffee-to-go
+# coffee-to-go ☕️
 
 `coffee-to-go` is a CLI tool for learning Golang through examples of managing and ordering coffee from a coffee shop.
 This tool provides simple examples of Golang concepts and best practices. It started out as a way for me to personally
