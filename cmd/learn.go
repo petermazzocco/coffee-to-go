@@ -61,7 +61,7 @@ Available concepts:
 		case "context":
 			if len(args) < 2 {
 				fmt.Println("Available context examples:")
-				fmt.Println("  delivery [address] - Learn context with delivery tracking")
+				fmt.Println("  delivery [seconds] - Learn context with delivery tracking")
 				fmt.Println("  pickup [code]      - Learn context with order pickup")
 				os.Exit(1)
 			}

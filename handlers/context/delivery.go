@@ -30,12 +30,13 @@ func CoffeeShopDelivery(seconds string) {
 		log.Println("Coffee is being delivered...")
 		duration := time.Duration(sec) * time.Second
 		time.Sleep(duration) // The delivery time you entered
+		delivered <- true    // Indicate that the coffee has been delivered (pass true to the channel)
 		close(delivered)     // Close the channel to indicate delivery completion
 	}()
 
 	select {
-	case <-delivered: // The customer will "receive" a delivered order
-		log.Println("Coffee delivered on time! The customer is happy.")
+	case d := <-delivered: // The customer will "receive" a delivered order (d var receives a boolean value)
+		log.Printf("Coffee delivered on time! The customer is happy: delivered channel is %v.\n", d)
 	case <-ctx.Done(): // Handle the case in which it's been delivered late (timed out)
 		log.Println("Our coffee was delivered late! We will refund the custoemr for their cold coffee:", ctx.Err())
 	}
