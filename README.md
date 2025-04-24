@@ -32,9 +32,9 @@ Full documentation available [here](https://coffeetogo.dev/docs)
    cd coffee-to-go
    go install
    ```
-3. Run the tool:
+3. Run the tool and find available concepts:
    ```sh
-   coffee -h
+   coffee learn -h
    ```
 Some cmd functions require arguments to run, please refer to the `/cmd` folder to find which ones require arguments.
 If you want to get more familiar with how the functions work, please refer to the `/handlers` folder.
