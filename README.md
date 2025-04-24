@@ -5,6 +5,8 @@ This tool provides simple examples of Golang concepts and best practices. It sta
 learn Golang concepts in ways that made the most sense to me. I hope that this tool can help others learn Golang in a
 way that makes sense to them as well.
 
+Full documentation available [here](https://coffeetogo.dev/docs)
+
 ## What to expect
 
 - **Golang Concepts**: Understand the core concepts that make Golang great.
