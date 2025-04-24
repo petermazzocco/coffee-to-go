@@ -63,6 +63,7 @@ Available concepts:
 				fmt.Println("Available context examples:")
 				fmt.Println("  delivery [seconds] - Learn context with delivery tracking")
 				fmt.Println("  pickup [code]      - Learn context with order pickup")
+				fmt.Println("  api                - Learn context with api queries")
 				os.Exit(1)
 			}
 
@@ -85,7 +86,7 @@ Available concepts:
 					os.Exit(1)
 				}
 				context.CoffeeShopPickUpOrder(orderCode)
-			case "database":
+			case "api":
 				context.OrderNewProducts()
 			default:
 				fmt.Printf("Unknown context example: %s\n", ctxType)
@@ -190,7 +191,21 @@ Available concepts:
 			mutexHandler.MachineInUse()
 
 		case "pointers":
-			pointers.UpdateOrder()
+			if len(args) < 1 {
+				fmt.Println("Available maps examples:")
+				fmt.Println("  update           - Update an order")
+				fmt.Println("  shop             - Create a new coffee shop")
+				os.Exit(1)
+			}
+			switch args[1] {
+			case "update":
+				pointers.UpdateOrder()
+			case "shop":
+				pointers.CreateNewCoffeeShop()
+			default:
+				fmt.Printf("Unknown pointers example: %s\n", args[1])
+				os.Exit(1)
+			}
 
 		case "select":
 			if len(args) < 2 {
