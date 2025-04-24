@@ -85,6 +85,8 @@ Available concepts:
 					os.Exit(1)
 				}
 				context.CoffeeShopPickUpOrder(orderCode)
+			case "database":
+				context.OrderNewProducts()
 			default:
 				fmt.Printf("Unknown context example: %s\n", ctxType)
 				os.Exit(1)

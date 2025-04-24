@@ -13,7 +13,6 @@ import (
 func CoffeeShopPickUpOrder(pickupCode int) {
 	// Set a code value in our context.
 	// This is the code we expect the customer to tell us to pick up an order.
-
 	orderCode := 42069
 	ctx := context.WithValue(context.Background(), "code", orderCode)
 
