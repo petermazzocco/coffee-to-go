@@ -2,7 +2,7 @@ package goroutines
 
 import (
 	"context"
-	"fmt"
+	"log"
 	"math/rand"
 	"sync"
 	"time"
@@ -13,24 +13,20 @@ type Order struct {
 	Status string
 }
 
-func logMessage(format string, args ...any) {
-	prefix := fmt.Sprintf("[%s] ", time.Now().Format("15:04:05.000"))
-	fmt.Printf(prefix+format+"\n", args...)
-}
-
-func barista(id int, orders <-chan int, results chan<- Order, wg *sync.WaitGroup, ctx context.Context) {
+func barista(ctx context.Context, wg *sync.WaitGroup, id int, orderQueue <-chan int, results chan<- Order) {
 	defer wg.Done()
 	for {
 		select {
-		case orderNum, ok := <-orders:
+		// the orderQueue receives the order ID
+		case o, ok := <-orderQueue:
 			if !ok {
 				return
 			}
-			workTime := time.Duration(50+rand.Intn(100)) * time.Millisecond // adjust the speed at which the workers operate
-			logMessage("Barista #%d is starting to work on order #%d", id, orderNum)
+			workTime := time.Duration(50+rand.Intn(100)) * time.Millisecond
+			log.Printf("Barista #%d is starting to work on order #%d", id, o)
 			time.Sleep(workTime)
-			logMessage("Barista #%d took %v to complete order #%d", id, workTime, orderNum)
-			results <- Order{ID: orderNum, Status: "fulfilled"}
+			log.Printf("Barista #%d took %v to complete order #%d", id, workTime, o)
+			results <- Order{ID: o, Status: "fulfilled"}
 		case <-ctx.Done():
 			return
 		}
@@ -39,35 +35,39 @@ func barista(id int, orders <-chan int, results chan<- Order, wg *sync.WaitGroup
 
 func CoffeeShopBatchOrder() {
 	ctx, cancel := context.WithCancel(context.Background())
-	numBaristas := 4 // adjust the number of workers to complete the task
-	start := time.Now()
+	numBaristas := 4    // adjust the number of workers to complete the task
+	start := time.Now() // track the time to complete the work
 
 	totalOrders := rand.Intn(200) + 100 // adjust the amount of random orders
 	orderQueue := make(chan int, totalOrders)
 	completedOrders := make(chan Order, totalOrders)
 
-	logMessage("The Coffee Shop just received %d orders", totalOrders)
+	log.Printf("The Coffee Shop just received %d orders", totalOrders)
 
 	var wg sync.WaitGroup
-
+	// For each barsita we will run the goroutine
 	for i := range numBaristas {
 		wg.Add(1)
-		go barista(i, orderQueue, completedOrders, &wg, ctx)
+		go barista(ctx, &wg, i, orderQueue, completedOrders)
 	}
 
-	for orderNum := 1; orderNum <= totalOrders; orderNum++ {
-		orderQueue <- orderNum
+	// Send each order to the orderQueue channel
+	for o := 1; o <= totalOrders; o++ {
+		orderQueue <- o
 	}
 
+	// Wait and close the orderQueue channel
 	go func() {
 		wg.Wait()
 		close(orderQueue)
 	}()
 
+	completed := make([]Order, 0, totalOrders)
 	for i := 0; i < totalOrders; i++ {
-		<-completedOrders
+		completed = append(completed, <-completedOrders)
 	}
 
+	// Wait and close the completedOrders
 	go func() {
 		wg.Wait()
 		close(completedOrders)
@@ -75,5 +75,5 @@ func CoffeeShopBatchOrder() {
 
 	cancel()
 
-	logMessage("All orders completed in %v.", time.Since(start))
+	log.Printf("Completed %d orders in %v seconds", len(completed), time.Since(start))
 }

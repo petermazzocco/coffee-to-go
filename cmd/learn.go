@@ -94,10 +94,43 @@ Available concepts:
 			}
 
 		case "generics":
-			generics.GiveCustomerBill()
+			if len(args) < 2 {
+				fmt.Println("Available context examples:")
+				fmt.Println("  bill 		- Learn generics with summarizing a bill")
+				fmt.Println("  stock        - Learn generics by checking if a item is in stock")
+				fmt.Println("  inventory    - Learn generics by creating an inventory")
+				os.Exit(1)
+			}
+			switch args[1] {
+			case "bill":
+				generics.GiveCustomerBill()
+			case "stock":
+				generics.GetStatus()
+			case "inventory":
+				generics.NewInventory()
+			default:
+				fmt.Printf("Unknown context example: %s\n", args[1])
+				os.Exit(1)
+			}
 
 		case "goroutines":
-			goroutines.CoffeeShopBatchOrder()
+			if len(args) < 2 {
+				fmt.Println("Available context examples:")
+				fmt.Println("  batch 	- Learn goroutines by batch ordering")
+				fmt.Println("  temp     - Learn generics by checking the temp of our espresso machine")
+				os.Exit(1)
+			}
+
+			goroutinesType := args[1]
+			switch goroutinesType {
+			case "batch":
+				goroutines.CoffeeShopBatchOrder()
+			case "temp":
+				goroutines.TempCheck()
+			default:
+				fmt.Printf("Unknown goroutines example: %s\n", args[2])
+				os.Exit(1)
+			}
 
 		case "interface":
 			interfaces.CoffeeShopChangeImport()

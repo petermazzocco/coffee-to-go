@@ -3,6 +3,8 @@ package generics
 import (
 	"fmt"
 	"time"
+
+	"golang.org/x/exp/constraints"
 )
 
 // Imagine we have two customers that need a bill
@@ -27,7 +29,7 @@ func sumFloatPrices(m map[string]float64) float64 {
 	return sum
 }
 
-// You can replace "int64 | float64" below with this type for better readability
+// You can replace "constraints.Ordered" below with this type if you want:
 type Numbers interface {
 	int64 | float64
 }
@@ -37,7 +39,7 @@ type Numbers interface {
 // (optionally, you can create an interface for better type safety, see above)
 // and by using a type parameter K that can be any comparable type
 // now we can use one POS to handle all types of prices
-func sumPrices[K comparable, V int64 | float64](m map[K]V) V {
+func sumPrices[K comparable, V constraints.Ordered](m map[K]V) V {
 	var sum V
 	for _, v := range m {
 		sum += v
