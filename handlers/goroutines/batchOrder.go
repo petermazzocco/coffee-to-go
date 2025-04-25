@@ -18,10 +18,7 @@ func barista(ctx context.Context, wg *sync.WaitGroup, id int, orderQueue <-chan 
 	for {
 		select {
 		// the orderQueue receives the order ID
-		case o, ok := <-orderQueue:
-			if !ok {
-				return
-			}
+		case o := <-orderQueue:
 			workTime := time.Duration(50+rand.Intn(100)) * time.Millisecond
 			log.Printf("Barista #%d is starting to work on order #%d", id, o)
 			time.Sleep(workTime)
